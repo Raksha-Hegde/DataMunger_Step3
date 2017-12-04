@@ -13,13 +13,13 @@ import com.stackroute.datamunger.query.Header;
 public class CsvQueryProcessor extends QueryProcessingEngine {
 
 	String fileName;
-	BufferedReader bufferedReader;
-	Header headerObj = new Header();
+	static BufferedReader bufferedReader;
+	static int columnCount;
 
 	// parameterized constructor to initialize filename
 	public CsvQueryProcessor(String fileName) throws FileNotFoundException {
 		this.fileName = fileName;
-		bufferedReader = new BufferedReader(new FileReader(this.fileName));
+		
 	}
 
 	/*
@@ -29,13 +29,16 @@ public class CsvQueryProcessor extends QueryProcessingEngine {
 	 */
 	@Override
 	public Header getHeader() throws IOException {
-
+		Header headerObj = new Header();
+		bufferedReader = new BufferedReader(new FileReader(this.fileName));
+		
 		// read the first line
 		String line = bufferedReader.readLine();
 
 		// populate the header object with the String array containing the
 		// header names
 		headerObj.setHeaders(line.split(","));
+		columnCount = headerObj.getHeaders().length;
 		return headerObj;
 	}
 
@@ -49,21 +52,20 @@ public class CsvQueryProcessor extends QueryProcessingEngine {
 	}
 
 	/*
-	 * implementation of getColumnType() method. To find out the data types, we
-	 * will read the first line from the file and extract the field values from
-	 * it. If a specific field value can be converted to Integer, the data type
-	 * of that field will contain "java.lang.Integer", otherwise if it can be
-	 * converted to Double, then the data type of that field will contain
-	 * "java.lang.Double", otherwise, the field is to be treated as String.
-	 * Note: Return Type of the method will be DataTypeDefinitions
+	 * implementation of getColumnType() method. To find out the data types, we will
+	 * read the first line from the file and extract the field values from it. If a
+	 * specific field value can be converted to Integer, the data type of that field
+	 * will contain "java.lang.Integer", otherwise if it can be converted to Double,
+	 * then the data type of that field will contain "java.lang.Double", otherwise,
+	 * the field is to be treated as String. Note: Return Type of the method will be
+	 * DataTypeDefinitions
 	 */
 	@Override
 	public DataTypeDefinitions getColumnType() throws IOException {
 		DataTypeDefinitions dataTypeDef = new DataTypeDefinitions();
-		int count = headerObj.getHeaders().length;
 		String line = bufferedReader.readLine();
-		String[] rowData = line.split(",", count);
-		String[] dataType = new String[count];
+		String[] rowData = line.split(",", columnCount);
+		String[] dataType = new String[columnCount];
 		int i = 0;
 		for (String str : rowData) {
 			try {
