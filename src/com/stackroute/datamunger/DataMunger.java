@@ -3,9 +3,6 @@ package com.stackroute.datamunger;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
-
-import com.stackroute.datamunger.query.DataTypeDefinitions;
-import com.stackroute.datamunger.query.Header;
 import com.stackroute.datamunger.reader.CsvQueryProcessor;
 
 public class DataMunger {
@@ -18,7 +15,6 @@ public class DataMunger {
 		String fileName = scannerObj.nextLine();
 		scannerObj.close();
 
-		
 		CsvQueryProcessor queryProcessor;
 		try {
 			/*
@@ -30,26 +26,26 @@ public class DataMunger {
 			 * call getHeader() method of CsvQueryProcessor class to retrieve the array of
 			 * headers
 			 */
-			
-				queryProcessor.getHeader();
+			String[] header = queryProcessor.getHeader().getHeaders();
 			/*
 			 * call getColumnType() method of CsvQueryProcessor class to retrieve the array
 			 * of column data types which is actually the object of DataTypeDefinitions
 			 * class
 			 */
-			//queryProcessor.getColumnType();
-			
+			String[] columnType = queryProcessor.getColumnType().getDataTypes();
+			/*
+			 * display the columnName from the header object along with its data type from
+			 * DataTypeDefinitions object
+			 */
+			for( int i =0;i<header.length;i++)
+				System.out.println(header[i]+"\t\t"+columnType[i]);
+
 		} catch (FileNotFoundException e) {
-			System.out.println("File not found");
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		catch (IOException e) {
-			System.out.println("File not found");
-		}
-		
-		/*
-		 * display the columnName from the header object along with its data type from
-		 * DataTypeDefinitions object
-		 */
+
 		
 
 	}
