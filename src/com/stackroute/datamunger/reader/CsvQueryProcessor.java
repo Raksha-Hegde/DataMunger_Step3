@@ -65,20 +65,20 @@ public class CsvQueryProcessor extends QueryProcessingEngine {
 		String line = bufferedReader.readLine();
 		String[] rowData = line.split(",", columnCount);
 		String[] dataType = new String[columnCount];
-		int i = 0;
+		int counter = 0;
 		for (String str : rowData) {
 			try {
 				Integer.parseInt(str);
-				dataType[i] = "java.lang.Integer";
-				i++;
+				dataType[counter] = "java.lang.Integer";
+				counter++;
 			} catch (NumberFormatException e) {
 				try {
 					Float.parseFloat(str);
-					dataType[i] = "java.lang.Float";
-					i++;
+					dataType[counter] = "java.lang.Float";
+					counter++;
 				} catch (NumberFormatException e1) {
-					dataType[i] = "java.lang.String";
-					i++;
+					dataType[counter] = "java.lang.String";
+					counter++;
 
 				}
 
